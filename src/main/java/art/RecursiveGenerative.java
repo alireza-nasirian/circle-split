@@ -16,6 +16,7 @@ public class RecursiveGenerative extends PApplet {
 
     public void settings() {
         size(1200, 900); // adjust as needed
+        pixelDensity(2);
         smooth(8);
     }
 
