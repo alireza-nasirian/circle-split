@@ -23,8 +23,6 @@ public class RecursiveGenerative extends PApplet {
     public void setup() {
         // Random each run:
         seed = (long) random(Integer.MAX_VALUE);
-        // If you want reproducible output for debugging, set a fixed seed:
-        // seed = 123456;
 
         randomSeed(seed);
         noiseSeed(seed);
@@ -100,22 +98,22 @@ public class RecursiveGenerative extends PApplet {
     }
 
     void drawLeaf(float x, float y, float w, float h, int[] pal, int depth) {
-        pushMatrix();
+        pushMatrix();  // everything inside drawLeaf uses local coordinates - finally we should call popMatrix()
         translate(x, y);
 
         // light background tint in region
         noStroke();
-        int bg = pal[(int) random(pal.length)];
-        fill(red(bg), green(bg), blue(bg), random(10, 26));
-        rect(0, 0, w, h);
+        int bg = pal[(int) random(pal.length)];  // this makes the final image feel “layered” and helps separate regions.
+        fill(red(bg), green(bg), blue(bg), random(10, 26));  // alpha = transparency (opacity)
+        rect(0, 0, w, h);  // draws a rectangle to the screen
 
         // main shape: circle / arc / blob-ish ring
-        float cx = random(w * 0.25f, w * 0.75f);
+        float cx = random(w * 0.25f, w * 0.75f);  // picks a random “center” and a size for the main motif
         float cy = random(h * 0.25f, h * 0.75f);
         float d = random(min(w, h) * 0.35f, min(w, h) * 0.95f);
 
         // stroke style varies with depth
-        float sw = map(depth, 0, maxDepth, 2.2f, 0.7f);
+        float sw = map(depth, 0, maxDepth, 2.2f, 0.7f);  // depth controls style: deeper leaves get lighter, finer detail.
         strokeWeight(sw);
 
         int c = pal[(int) random(pal.length)];
@@ -195,7 +193,7 @@ public class RecursiveGenerative extends PApplet {
     }
 
     void drawGrain(float noiseScale, int alpha) {
-        loadPixels();
+        loadPixels(); // Loads the pixel data for the display window into the pixels[] array
         for (int i = 0; i < pixels.length; i++) {
             int x = i % width;
             int y = i / width;
